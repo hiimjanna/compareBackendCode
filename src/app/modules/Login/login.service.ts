@@ -75,8 +75,13 @@ export class LoginService {
     if (TEST_SETTING.ENABLE) {
       token = new Date().getTime().toString();
       this.dbAddLoginLog(sn, account, {'status': 0, 'message': 'test'});
-      optionList = TEST_SETTING.OPTION_LIST;
-      roleList = TEST_SETTING.ROLE_LIST;
+      if(account === 'Admin1@igs.com.tw' || account === 'Admin2@igs.com.tw' || account === 'Admin3@igs.com.tw' || account === 'Tom@igs.com.tw') {
+        optionList = TEST_SETTING.OPTION_LIST;
+        roleList = TEST_SETTING.ROLE_LIST;
+      } else {
+        optionList = [];
+        roleList = ['igs_normal'];
+      }
     } else {
       token = authRes.token;
       this.dbAddLoginLog(sn, account, authRes);

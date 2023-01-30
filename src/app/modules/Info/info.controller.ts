@@ -4,8 +4,11 @@ import {
     Get
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('/info')
+@ApiTags('Info - 版本資訊')
+
 export class InfoController {
     @Get()
     @HttpCode(200)

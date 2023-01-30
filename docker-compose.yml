@@ -7,8 +7,9 @@ services:
     ports:
       - "8001:8000"
     environment:
-      MONGO_DEFAULT_HOST: "127.0.0.1"
+      MONGO_DEFAULT_HOST: "mongodb+srv://bolin8017:1234@cluster0.c7c3k.mongodb.net/?retryWrites=true&w=majority"
       MONGO_DEFAULT_PORT: "27017"
+      MONGO_DEFAULT_CUSTOMURL: true
       REDIS_DEFAULT_HOST: "redis"
       REDIS_DEFAULT_PORT: "6379"
     networks:

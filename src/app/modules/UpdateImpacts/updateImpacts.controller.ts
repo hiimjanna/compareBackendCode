@@ -9,10 +9,10 @@ import {
     Inject,
     Req
 } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator';
+import { ApiBody} from '@nestjs/swagger/dist/decorators/api-body.decorator';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 import { UpdateImpactsService } from './updateImpacts.service'
-import { UploadFileToGCS } from 'src/core/util/UploadFileToGCS';
+import { UploadFileToGCS } from '../../../core/util/UploadFileToGCS';
 import { GetFeatureContentReqDTO, GetFeatureContentRespDTO } from './dto/getFeatureContent';
 import { GetUpdateImpactsListReqDTO, GetUpdateImpactsListRespDTO } from './dto/getUpdateImpactsList';
 import { CreateFeatureReqDTO, CreateFeatureRespDTO, EditFeatureReqDTO, } from './dto/createFeature';
@@ -25,9 +25,11 @@ import { GetSimpleFeatureContentReqDTO, GetSimpleFeatureContentRespDTO } from '.
 import { GetFeatureEditHistoryReq, GetFeatureEditHistoryRes } from './dto/getFeatureEditHistory';
 import { GetSpecificVerFeatureContentReq, GetSpecificVerFeatureContentRes } from './dto/getSpecificVerFeatureContent';
 import { RevertFeatureContentReq, RevertFeatureContentRes } from './dto/revertFeatureContent';
-import { ApiHeader } from '@nestjs/swagger';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
 
 @Controller('updateImpacts')
+@ApiTags('UpdateImpacts - 更新影響力')
+
 export class UpdateImpactsController {
     controllerName = 'updateImpacts'
 
@@ -51,6 +53,7 @@ export class UpdateImpactsController {
         this.AccessLog(0, 'getUpdateImpactsList', body)
         let fieldName = 'difference_' + body.country + '_' + body.days;
         let result = await this.updateImpactsService.queryUpdateInfluence(body, fieldName);
+        
         let resp: GetUpdateImpactsListRespDTO = await this.updateImpactsService.formatUpdateInfluence(result, fieldName)
         this.AccessLog(1, 'getUpdateImpactsList', resp)
         return resp

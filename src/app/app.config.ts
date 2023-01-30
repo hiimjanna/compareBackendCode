@@ -21,43 +21,54 @@ export const LOGGER = {
 
 export const REDIS = {
     default: {
+        //host: process.env.REDIS_DEFAULT_HOST || 'redis-19655.c267.us-east-1-4.ec2.cloud.redislabs.com:19655',
         host: process.env.REDIS_DEFAULT_HOST || 'localhost',
         port: process.env.REDIS_DEFAULT_PORT
             ? parseInt(process.env.REDIS_DEFAULT_PORT, 10)
-            : 6379,
+            : 6379, 
         db: process.env.REDIS_DEFAULT_DB
             ? parseInt(process.env.REDIS_DEFAULT_DB, 10)
             : 0,
+        customURL: false
     },
 };
 
 export const MONGO = {
     default: {
-        host: process.env.MONGO_DEFAULT_HOST || '192.168.133.154',
+        host: process.env.MONGO_DEFAULT_HOST || 'localhost',
         port: process.env.MONGO_DEFAULT_PORT
             ? parseInt(process.env.MONGO_DEFAULT_PORT, 10)
             : 27017,
         dbName: process.env.MONGO_DEFAULT_DB
             ? process.env.MONGO_DEFAULT_DB
             : 'AnalyzeData',
+        customURL: process.env.MONGO_DEFAULT_CUSTOMURL 
+            ? (process.env.MONGO_DEFAULT_CUSTOMURL === 'true' ? true : false)
+            : false
     },
     log: {
-        host: process.env.MONGO_DEFAULT_HOST || '192.168.133.154',
+        host: process.env.MONGO_DEFAULT_HOST || 'localhost',
         port: process.env.MONGO_DEFAULT_PORT
             ? parseInt(process.env.MONGO_DEFAULT_PORT, 10)
             : 27017,
         dbName: process.env.MONGO_DEFAULT_DB
             ? process.env.MONGO_DEFAULT_DB
             : 'AnalyzeData_Log',
+        customURL:  process.env.MONGO_DEFAULT_CUSTOMURL 
+            ? (process.env.MONGO_DEFAULT_CUSTOMURL === 'true' ? true : false)
+            : false
     },
     user: {
-      host: process.env.MONGO_DEFAULT_HOST || '192.168.133.154',
-      port: process.env.MONGO_DEFAULT_PORT
-          ? parseInt(process.env.MONGO_DEFAULT_PORT, 10)
-          : 27017,
-      dbName: process.env.MONGO_DEFAULT_DB
-          ? process.env.MONGO_DEFAULT_DB
-          : 'AnalyzeUserData',
+        host: process.env.MONGO_DEFAULT_HOST || 'localhost',
+        port: process.env.MONGO_DEFAULT_PORT
+            ? parseInt(process.env.MONGO_DEFAULT_PORT, 10)
+            : 27017,
+        dbName: process.env.MONGO_DEFAULT_DB
+            ? process.env.MONGO_DEFAULT_DB
+            : 'AnalyzeUserData',
+        customURL:  process.env.MONGO_DEFAULT_CUSTOMURL 
+            ? (process.env.MONGO_DEFAULT_CUSTOMURL === 'true' ? true : false)
+            : false
     }
 };
 

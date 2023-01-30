@@ -22,6 +22,9 @@ export class RedisClient implements IRedisClient {
     }
 
     get url() {
+        if(this.customURL) {
+            return this.host
+        }
         return util.format(
             '%s:%s?database=%s',
             this.host,
@@ -35,6 +38,7 @@ export class RedisClient implements IRedisClient {
         private host: string,
         private port: number,
         private db: number = null,
+        private customURL: boolean,
         private options = {},
     ) {}
 

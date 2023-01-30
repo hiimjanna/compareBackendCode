@@ -35,12 +35,16 @@ export class MongoClient implements IMongoClient {
     }
 
     get url() {
-        return util.format(
-            'mongodb://%s:%s/%s',
-            this.host,
-            this.port,
-            this.dbName,
-        );
+        if(this.customURL) {
+            return this.host;
+        } else {
+            return util.format(
+                'mongodb://%s:%s/%s',
+                this.host,
+                this.port,
+                this.dbName,
+            );
+        }
     }
 
     constructor(
@@ -48,6 +52,7 @@ export class MongoClient implements IMongoClient {
         private host: string,
         private port: number,
         private dbName: string,
+        private customURL: boolean,
         private authName?: string,
         private authPassword?: string,
         private authSource: string = 'admin',

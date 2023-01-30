@@ -28,6 +28,7 @@ export class UpdateImpactsService {
     private GameType: IMongoCollection;
     private FeatureTags: IMongoCollection;
     private FeatureContent: IMongoCollection;
+    private FeatureView: IMongoCollection;
     private GameRefineryDefinition: IMongoCollection;
     private FeatureContentChangeHistory: IMongoCollection;
     private FeatureDataUseLogColl: IMongoCollection;
@@ -49,6 +50,7 @@ export class UpdateImpactsService {
         this.GameType = db.collection('GameType');
         this.FeatureTags = db.collection('FeatureTags');
         this.FeatureContent = db.collection('FeatureContent');
+        this.FeatureView = db.collection('FeatureView');
         this.GameRefineryDefinition = db.collection('GameRefineryDefinition');
         this.FeatureContentChangeHistory = db.collection('FeatureContentChangeHistory');
         this.FeatureDataUseLogColl = logDB.collection('FeatureDataUseLog');
@@ -59,6 +61,7 @@ export class UpdateImpactsService {
         this.GameType.createIndex({ 'AppType': 1, 'AppID': 1 })
         this.FeatureContent.createIndex({ 'appId': 1, 'version': 1, 'featureName': 1, 'expireTime': 1 }, true)
         this.FeatureContent.createIndex({ 'expireTime': 1 }, false, 0)
+        this.FeatureView.createIndex({ 'FeatureId': 1, 'inteval': 1 })
         this.GameRefineryDefinition.createIndex({ 'Definition': 1 }, true)
         this.FeatureContentChangeHistory.createIndex(
             { 'Id': 1, 'appId': 1, 'version': 1, 'editVersion': 1 },
@@ -83,6 +86,7 @@ export class UpdateImpactsService {
         if (body.tags !== undefined && body.tags.length > 0) query['Tags'] = { '$in': body.tags }
 
         let gameIds = await this.getGameListByCountry(body.country)
+
         if (body.types != null && body.types.length > 0) {
             let gameIdsByType = await this.getGameListByGameTypes(body.types)
             gameIds = gameIds.filter(function (val) {
@@ -112,6 +116,10 @@ export class UpdateImpactsService {
         let skip = body.pages * body.limit
         result.queryResult = await this.queryUpdateInfluenceWithFeatureContent(query, projection, skip, body.limit, sort);
 
+        //test
+        // result.queryResult = await this.GameType.find({}, projection);
+        // result.totalCount = result.queryResult.length
+     
         for (let i of result.queryResult) {
             let customFeatures = []
             for (let j of i.custom_features) {
@@ -191,6 +199,7 @@ export class UpdateImpactsService {
             '_id': 0, 'AppID': 1
         }
         let queryResult = await this.GameType.find(query, projection)
+
         let gameIds: Array<string> = []
         for (let i of queryResult) {
             gameIds.push(i.AppID)
@@ -328,9 +337,30 @@ export class UpdateImpactsService {
         return this.FeatureContent.updateOne(query, { $set: { 'expireTime': expireTime } })
     }
 
+    public GetQuarter(date: Date) {
+        if(date.getMonth() < 4) {
+            return {year: date.getFullYear(), quarter: 1}
+        } else if (date.getMonth() < 7) {
+            return {year: date.getFullYear(), quarter: 2}
+        } else if (date.getMonth() < 10) {
+            return {year: date.getFullYear(), quarter: 3}
+        } else {
+            return {year: date.getFullYear(), quarter: 4}
+        }
+    }
+
     public async getFeatureContent(query: GetFeatureContentReqDTO): Promise<GetFeatureContentRespDTO> {
         let result = new GetFeatureContentRespDTO();
         result = await this.FeatureContent.findOne(query, {});
+        // Historical view count
+        this.FeatureContent.updateOne(query, { $inc : { "views": 1 } })
+        // Quarterly view count
+        const curQuarter = this.GetQuarter(new Date())
+        let viewQuery = { FeatureId: result['_id'].toString(), inteval: curQuarter }
+        let doc = { ...viewQuery, views: 1 }
+        if(await this.FeatureView.count(viewQuery) === 0) this.FeatureView.insertOne(doc)
+        else this.FeatureView.updateOne(viewQuery, { $inc : { "views": 1 } })
+
         if (!result) {
             return result;
         }

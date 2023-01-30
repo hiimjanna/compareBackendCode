@@ -9,6 +9,7 @@ import {
   Header,
   Req
 } from '@nestjs/common'
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
 import { ApiBody } from '@nestjs/swagger/dist/decorators/api-body.decorator';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 import { LoginService } from './login.service';
@@ -23,6 +24,7 @@ const PARAMETER_CHECK_TYPE = {
 }
 
 @Controller('login')
+@ApiTags('Login - 登入')
 export class LoginController {
   controllerName = 'login';
 

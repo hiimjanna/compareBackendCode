@@ -14,6 +14,7 @@ export class MongoService {
                 value.host,
                 value.port,
                 value.dbName,
+                value.customURL,
                 value.authName,
                 value.authPassword,
                 value.authSource,

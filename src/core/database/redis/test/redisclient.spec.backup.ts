@@ -10,7 +10,7 @@ function sleep(t) {
 describe('RedisClient', () => {
     let redisClient: RedisClient;
     beforeAll(async () => {
-        redisClient = new RedisClient(console, 'localhost', 6379);
+        redisClient = new RedisClient(console, 'localhost', 6379, null, false);
         await redisClient.connect();
     });
 

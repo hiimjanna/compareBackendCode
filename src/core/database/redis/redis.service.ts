@@ -8,12 +8,14 @@ export class RedisService {
     private redisClients = {};
     constructor(@Inject(LOG4JS_SYSTEM_LOGGER) private readonly logger) {
         for (const [key, _value] of Object.entries(REDIS)) {
+            console.log(REDIS)
             const value: any = _value;
             const redisClient = new RedisService.RedisClientClass(
                 this.logger,
                 value.host,
                 value.port,
                 value.db,
+                value.customURL,
                 value.options,
             );
             this.redisClients[key] = redisClient;
