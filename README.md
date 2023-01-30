@@ -1,0 +1,1 @@
+[![Build Status](http://192.168.133.169:18080/api/badges/webdev/nuxt-nest-sample/status.svg)](http://192.168.133.169:18080/webdev/nuxt-nest-sample)

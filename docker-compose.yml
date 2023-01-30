@@ -1,0 +1,23 @@
+version: "2"
+
+services:
+  i17game-refinery-api:
+    image: i17game-refinery-api
+    container_name: i17game-refinery-api
+    ports:
+      - "8001:8000"
+    environment:
+      MONGO_DEFAULT_HOST: "127.0.0.1"
+      MONGO_DEFAULT_PORT: "27017"
+      REDIS_DEFAULT_HOST: "redis"
+      REDIS_DEFAULT_PORT: "6379"
+    networks:
+      - i17
+  redis:
+    image: redis
+    networks:
+      - i17
+
+networks:
+  i17:
+    driver: bridge
